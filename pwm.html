@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <title>FlashAir PWM music sequencer</title>
+  <meta charset="utf-8">
+  <script>
+  const doRequest = (url) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true); // true for asynchronous request
+    xhr.onload = (e) => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          document.getElementById("cgi_result").innerHTML = xhr.responseText;
+        } else {
+          document.getElementById("cgi_result").innerHTML = xhr.statusText;
+        }
+      }
+    };
+    xhr.onerror = (e) => {
+      document.getElementById("cgi_result").innerHTML = xhr.statusText;
+    };
+    xhr.send(null);
+  }
+  const play = () => {
+    doRequest("/command.cgi?op=131&ADDR=0&LEN=1&DATA=1");
+  }
+  const stop = () => {
+    doRequest("/command.cgi?op=131&ADDR=0&LEN=1&DATA=0");
+  }
+  const kill = () => {
+    doRequest("/command.cgi?op=131&ADDR=0&LEN=1&DATA=2");
+  }
+  </script>
+</head>
+<body>
+<h1>FlashAir PWM music sequencer</h1>
+<form>
+<input type="button" value="play" onclick="play()">
+<input type="button" value="stop" onclick="stop()">
+<input type="button" value="kill lua" onclick="kill()">
+</form>
+<div>
+<pre id="cgi_result">
+result goes here.
+</pre>
+</div>
+</body>
+</html>
